@@ -1,8 +1,8 @@
 from unittest.mock import Mock, patch
 
-from nose.tools import assert_equal, assert_list_equal, assert_is_none
+from nose.tools import assert_equal, assert_list_equal, assert_is_none, assert_true
 
-from src.flights import set_requirements, get_flights
+from src.flights import set_requirements, get_flights, get_flight_details
 
 departure_airport = "LGW"
 arrival_airport = "BCN"
@@ -83,6 +83,24 @@ flights_ = {
     ]
 }
 
+all_flights = [
+    [
+        {
+            'airline': 'easyJet',
+            'departure_airport': 'LGW',
+            'departure_date': '2019-04-05',
+            'departure_time': '07:25',
+            'arrival_airport': 'BCN',
+            'arrival_date': '2019-04-05',
+            'arrival_time': '10:40'
+        },
+        {
+            'currency': 'GBP',
+            'price': '122'
+        }
+    ]
+]
+
 
 def test_set_requirements():
     expected_payload = {
@@ -122,3 +140,14 @@ def test_get_flights_when_response_is_not_ok(mock_post):
 
     response = get_flights(departure_airport, arrival_airport, departure_date)
     assert_is_none(response)
+
+
+@patch("flights.get_flights")
+def test_get_flight_details_when_flights_is_not_none(mock_get_flights):
+    mock_get_flights.return_value = Mock()
+    mock_get_flights.return_value = flights_
+
+    results = get_flight_details(departure_airport, arrival_airport, departure_date)
+    assert_true(mock_get_flights.called)
+
+    assert_list_equal(results, all_flights)
