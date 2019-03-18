@@ -125,7 +125,7 @@ def test_set_requirements():
     assert_equal(result, expected_payload)
 
 
-@patch("flights.requests.post")
+@patch("src.flights.requests.post")
 def test_get_flights_when_response_is_ok(mock_post):
     mock_post.return_value = Mock(ok=True)
     mock_post.return_value.json.return_value = [flights_]
@@ -134,7 +134,7 @@ def test_get_flights_when_response_is_ok(mock_post):
     assert_list_equal(response, [flights_])
 
 
-@patch("flights.requests.post")
+@patch("src.flights.requests.post")
 def test_get_flights_when_response_is_not_ok(mock_post):
     mock_post.return_value.ok = False
 
@@ -142,7 +142,7 @@ def test_get_flights_when_response_is_not_ok(mock_post):
     assert_is_none(response)
 
 
-@patch("flights.get_flights")
+@patch("src.flights.get_flights")
 def test_get_flight_details_when_flights_is_not_none(mock_get_flights):
     mock_get_flights.return_value = Mock()
     mock_get_flights.return_value = flights_
