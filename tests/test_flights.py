@@ -1,8 +1,8 @@
 from unittest.mock import Mock, patch
 
-from nose.tools import assert_equal, assert_list_equal
+from nose.tools import assert_equal, assert_list_equal, assert_is_none
 
-from flights import set_requirements, get_flights
+from src.flights import set_requirements, get_flights
 
 departure_airport = "LGW"
 arrival_airport = "BCN"
@@ -114,3 +114,11 @@ def test_get_flights_when_response_is_ok(mock_post):
 
     response = get_flights(departure_airport, arrival_airport, departure_date)
     assert_list_equal(response, [flights_])
+
+
+@patch("flights.requests.post")
+def test_get_flights_when_response_is_not_ok(mock_post):
+    mock_post.return_value.ok = False
+
+    response = get_flights(departure_airport, arrival_airport, departure_date)
+    assert_is_none(response)
