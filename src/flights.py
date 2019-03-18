@@ -75,5 +75,37 @@ def get_flight_details(departure_airport, arrival_airport, departure_date):
                             )
                             all_flights.append(segments)
 
-        return(all_flights)
+        return all_flights
+
+
+def show_flights(departure_airport, arrival_airport, departure_date):
+    flights_ = get_flight_details(departure_airport, arrival_airport, departure_date)
+
+    print("-" * 100)
+    print(f"Flights from {departure_airport} to {arrival_airport} on {departure_date}")
+    print("-" * 100)
+
+    for flight in flights_:
+        for info in flight:
+            print(
+                "     ".join(
+                    filter(
+                        None, (info.get('airline'),
+                               info.get('departure_airport'),
+                               info.get('departure_date'),
+                               info.get('departure_time'),
+                               info.get('arrival_airport'),
+                               info.get('arrival_date'),
+                               info.get('arrival_time'),
+                               info.get('currency'),
+                               info.get('price'),
+                               )
+                    )
+                )
+            )
+        print("-" * 100)
+
+
+if __name__ == '__main__':
+    show_flights(*sys.argv[1:])
 
